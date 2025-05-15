@@ -4,5 +4,5 @@
 
 ### Good luck!
 
-# Don't use dicrionary attacks!
+# Don't use dictionary attacks!
 We are safe from them anyway and our SD card is slow.
