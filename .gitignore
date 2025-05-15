@@ -1,0 +1,6 @@
+**/.pio
+**/.vscode
+**/__pycache__
+**/.cache
+**/compile_commands.json
+**/venv

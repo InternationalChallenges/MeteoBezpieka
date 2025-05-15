@@ -1,0 +1,184 @@
+<!-- templates/home.html -->
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+{% block content %}
+<script src="{% static 'scripts/scripts.js' %}" defer></script>
+{% comment %} <script src="{% static 'server/scripts.js' %}" defer></script> {% endcomment %}
+<section class="min-vh-100 gradient-custom">
+
+
+{% if user.is_authenticated %}
+
+    
+        
+    <nav class="navbar navbar-expand-lg py-3 navbar-light bg-white">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/logo.jpg' %}" width="48" height="48" class="align-middle me-1 img-fluid" alt="My Website">
+            météoBezpieka
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNavbar3" aria-controls="myNavbar3" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="myNavbar3">
+            <ul class="navbar-nav me-auto">
+                <!-- Autres éléments de la navigation -->
+            </ul>
+
+            <!-- Pour les grands écrans, on met les boutons en ligne et on ajuste leur taille -->
+            <div class="lc-block ms-auto d-grid gap-2 d-lg-flex d-lg-row">
+                <form action="{% url 'logout' %}" method="post" class="d-grid w-100">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary w-100 custom-btn">Log Out</button>
+                </form>
+                <a class="btn btn-primary w-100 custom-btn" href="{% url 'password_change' %}" role="button">Change Password</a>
+                <a class="btn btn-danger w-100 custom-btn" href="{% url 'account_delete' %}" role="button">Delete Account</a>
+            </div>
+        </div>
+    </div>
+    </nav>
+
+
+    {% if user.is_superuser %}  <!-- Check if the user is a superuser -->
+
+    
+    
+
+    <!-- You're logged in as '{{ user.username }}'!
+
+    Account settings:
+    <p><a href="{% url 'password_change' %}">Change password</a></p>
+    <a href="{% url 'account_delete' %}" style="color: red;">Delete My Account</a> -->
+
+    
+        
+    <div class="row row-cols-1 row-cols-lg-2 g-0 overflow-hidden">
+        <div class="column-container p-4 rounded shadow ">
+            <div class="lc-block" ></div>
+            <div class="column-card">
+
+            
+            <h2 class="mt-5 mb-4 text-center text-white">Physical Properties</h2>  
+                
+            <div class="container d-flex flex-column flex-md-row justify-content-between mb-4" >
+                <div class="flex-grow-1">
+                    <div class="d-flex align-items-center">
+                        <i class="fa-solid fa-temperature-three-quarters custom-icon"></i>
+
+                        <div class="progress flex-grow-1">
+                                <div class="progress-bar-temp" id="progressBarTemperature"></div>
+                                <div class="progress-overlay" id="progressOverlayTemperature"></div>
+                                <span class="progress-value barNumbers" id="infoTemperature"></span>
+                            <!--div class="progress-bar bg-primary" role="progressbar" id="progressBarTemperature"></div-->
+                        </div>
+                    </div>
+                    <h5 class="mt-4 mb-2">  </h5>
+                    <div class="d-flex align-items-center">
+
+                    <i class="fa-solid fa-droplet custom-icon"></i>
+                        <div class="progress flex-grow-1">
+                            <div class="progress-bar-humidity" id="progressBarHumidity"></div>
+                            <div class="progress-overlay" id="progressOverlayHumidity"></div>
+                            <span class="progress-value barNumbers" id="infoHumidity"></span>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-4 mb-2">  </h5>
+
+
+                    <div class="d-flex align-items-center">
+
+                    <i class="fa-solid fa-gauge-high custom-icon"></i>
+                    <div class="progress flex-grow-1">
+                        <div class="progress-bar-pressure bg-primary " role="progressbar" id="progressBarPressure"></div>
+                        <div class="progress-overlay" id="progressOverlayPressure"></div>
+                        <span class="progress-value barNumbers" id="infoPressure"></span>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row row-cols-1 g-0 overflow-hidden">
+    <!-- Graphique pour la température -->
+    <div class="col mb-4">
+        <div class="column-card">
+            <h2 class="mt-5 mb-2 text-center text-white">Temperature History</h2>
+            <!-- Canvas pour le graphique de la température -->
+            <canvas id="temperatureChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Graphique pour l'humidité -->
+    <div class="col mb-4">
+        <div class="column-card">
+            <h2 class="mt-5 mb-2 text-center text-white">Humidity History</h2>
+            <!-- Canvas pour le graphique de l'humidité -->
+            <canvas id="humidityChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Graphique pour la pression -->
+    <div class="col mb-4">
+        <div class="column-card">
+            <h2 class="mt-5 mb-2 text-center text-white">Pressure History</h2>
+            <!-- Canvas pour le graphique de la pression -->
+            <canvas id="pressureChart"></canvas>
+        </div>
+    </div>
+    </div>
+
+
+    {% else %}
+        <p class="text-white text-center">You are not a superuser and cannot access this data.</p>
+    {% endif %}
+{% else %}<div class="container vh-100 d-flex align-items-center">
+  <div class="row justify-content-center align-items-center  ">
+
+    <!-- Left Image -->
+    <div class="col-4 col-md-3 d-flex justify-content-center mb-4 mb-md-0">
+      <img src="{% static 'images/PUT.png' %}" class="img-fluid rounded" alt="Left Image">
+    </div>
+
+    <!-- Logout Message -->
+    <div class="col-12 col-md-6 mb-4 mb-md-0">
+      <div class="card text-white text-center shadow-lg" style="border-radius: 1rem; background: rgba(255, 255, 255, 0.2);">
+        <div class="card-body p-5">
+          <h2 class="fw-bold mb-2 text-white">You are not logged in</h2>
+          <p class="text-white-50 mb-4">You are not logged in</p>
+          <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-5">Log In</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-4 col-md-3 d-flex justify-content-center mb-4 mb-md-0">
+        <img src="{% static 'images/UMons.png' %}" class="img-fluid rounded" alt="Right Image">
+      </div>
+
+
+</section>
+
+
+</div>
+</div>
+</div>
+</div>
+</div>
+{% endif %} <!-- Closing the if-statement -->
+
+{% endblock %} <!-- Closing the content block -->
+
+
+
+ 

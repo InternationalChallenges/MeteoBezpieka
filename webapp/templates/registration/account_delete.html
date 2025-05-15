@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<script src="{% static 'scripts/scripts.js' %}"></script>
+
+{% block content %}
+<section class="vh-100 gradient-custom">
+    <nav class="navbar navbar-expand-lg py-3 navbar-light bg-white">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/logo.jpg' %}" width="48" height="48" class="align-middle me-1 img-fluid" alt="My Website">
+                My Site
+            </a>
+      
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNavbar3" aria-controls="myNavbar3" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+      
+            <div class="collapse navbar-collapse" id="myNavbar3">
+                <ul class="navbar-nav me-auto">
+                    <!-- Autres éléments de la navigation -->
+                </ul>
+      
+                <!-- Pour les grands écrans, on met les boutons en ligne et on ajuste leur taille -->
+                <div class="lc-block ms-auto d-grid gap-2 d-lg-flex d-lg-row">
+                    <form action="{% url 'logout' %}" method="post" class="d-grid w-100">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary w-100 custom-btn">Log Out</button>
+                    </form>
+                    <a class="btn btn-primary w-100 custom-btn" href="{% url 'password_change' %}" role="button">Change Password</a>
+                    <a class="btn btn-danger w-100 custom-btn" href="{% url 'account_delete' %}" role="button">Delete Account</a>
+                </div>
+            </div>
+        </div>
+      </nav>
+
+    <!-- Centered Delete Account Section with a Semi-Transparent Box -->
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="col-md-6 col-lg-4 p-4 rounded shadow" style="background: rgba(255, 255, 255, 0.2);">
+            <h2 class="text-white text-center mb-3">Delete Account</h2>
+            <p class="text-black text-center">Are you sure you want to delete your account? This action cannot be undone.</p>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-danger w-100">Delete My Account</button>
+            </form>
+
+            <a href="{% url 'home' %}" class="btn btn-primary w-100 mt-3">Cancel</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

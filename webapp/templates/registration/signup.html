@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+{% block content %}
+<section class="vh-100 gradient-custom d-flex align-items-center">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+
+      <!-- Left Image -->
+      <div class="col-3 col-md-3 d-flex justify-content-center mb-3 mb-md-0">
+        <img src="{% static 'images/PUT.png' %}" class="img-fluid rounded" alt="Left Image">
+      </div>
+
+      <!-- Sign-Up Form -->
+      <div class="col-12 col-md-6 mb-3 mb-md-0">
+        <div class="card text-white text-center shadow-lg" style="border-radius: 1rem; background: rgba(255, 255, 255, 0.2);">
+          <div class="card-body p-5">
+            <h2 class="fw-bold mb-2 text-white">Create an Account</h2>
+            <p class="text-white-50 mb-4">Please fill in the details below!</p>
+
+            <form method="post">
+              {% csrf_token %}
+
+              <div class="form-outline form-white mb-4">
+                <label class="form-label" for="id_username">Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                  <div class="text-danger">
+                    {% for error in form.username.errors %}
+                      <small>⚠️ {{ error }}</small><br>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                <label class="form-label" for="id_password1">Password</label>
+                {{ form.password1 }}
+                <div id="password-error-container" class="text-danger mt-1" style="display: none;">
+                  <div id="password-error"></div>
+                </div>
+                {% if form.password1.errors %}
+                  <div class="text-danger">
+                    {% for error in form.password1.errors %}
+                      <small>⚠️ {{ error }}</small><br>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+            
+                <label class="form-label" for="id_password2">Confirm Password</label>
+                {{ form.password2 }}
+                <div id="confirm-password-error" class="text-danger mt-1" style="display: none;"></div>
+                {% if form.password2.errors %}
+                  <div class="text-danger">
+                    {% for error in form.password2.errors %}
+                      <small>⚠️ {{ error }}</small><br>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+            </div>
+
+
+              <button type="submit" class="btn btn-outline-light btn-lg px-5" id="signup-button" >Sign Up</button>
+            </form>
+
+            <div class="mt-3">
+              <p class="mb-0">Already have an account? <a href="{% url 'login' %}" class="text-white-50 fw-bold">Login</a></p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Image -->
+      <div class="col-3 col-md-3 d-flex justify-content-center mb-3 mb-md-0">
+        <img src="{% static 'images/UMons.png' %}" class="img-fluid rounded" alt="Right Image">
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const passwordField = document.querySelector("#id_password1");
+        const confirmPasswordField = document.querySelector("#id_password2");
+        const submitButton = document.querySelector("#signup-button");
+
+        const passwordErrorContainer = document.querySelector("#password-error-container");
+        const passwordErrorDiv = document.querySelector("#password-error");
+        const confirmPasswordErrorDiv = document.querySelector("#confirm-password-error");
+
+        function validatePassword() {
+            const password = passwordField.value;
+            const confirmPassword = confirmPasswordField.value;
+            let errors = [];
+
+            // Password strength checks
+            if (password.length < 8) {
+                errors.push("⚠️ Must be at least 8 characters.");
+            }
+            if (!/[A-Z]/.test(password)) {
+                errors.push("⚠️ Must contain an uppercase letter.");
+            }
+            if (!/[0-9]/.test(password)) {
+                errors.push("⚠️ Must contain a number.");
+            }
+            if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password)) {
+                errors.push("⚠️ Must contain a special character.");
+            }
+
+            if (errors.length > 0) {
+                passwordErrorDiv.innerHTML = errors.join("<br>");
+                passwordErrorContainer.style.display = "block";
+            } else {
+                passwordErrorContainer.style.display = "none";
+            }
+
+            // Password confirmation validation
+            if (password !== confirmPassword && confirmPassword.length > 0) {
+                confirmPasswordErrorDiv.innerHTML = "⚠️ Passwords do not match.";
+                confirmPasswordErrorDiv.style.display = "block";
+            } else {
+                confirmPasswordErrorDiv.style.display = "none";
+            }
+
+            submitButton.disabled = errors.length > 0 || (confirmPassword.length > 0 && password !== confirmPassword);
+        }
+
+        passwordField.addEventListener("input", validatePassword);
+        confirmPasswordField.addEventListener("input", validatePassword);
+    });
+</script>
+{% endblock %}

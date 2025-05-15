@@ -1,0 +1,3 @@
+[submodule "embedded/lib/DHT11"]
+	path = embedded/lib/DHT11
+	url = https://github.com/dhrubasaha08/DHT11.git
